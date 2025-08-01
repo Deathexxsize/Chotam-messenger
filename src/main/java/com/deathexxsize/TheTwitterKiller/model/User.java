@@ -26,7 +26,8 @@ public class User {
     @Column(length = 64)
     private String password;
     @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(nullable = false)
+    private Role role = Role.USER;
 
     @OneToMany(mappedBy = "user")
     private List<Like> likes = new ArrayList<>();
