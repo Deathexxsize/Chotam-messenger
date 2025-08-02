@@ -2,9 +2,9 @@ package com.deathexxsize.TheTwitterKiller.service;
 
 import com.deathexxsize.TheTwitterKiller.dto.LoginDTO;
 import com.deathexxsize.TheTwitterKiller.dto.RegisterDTO;
-import com.deathexxsize.TheTwitterKiller.enums.Role;
 import com.deathexxsize.TheTwitterKiller.mapper.UserMapper;
 import com.deathexxsize.TheTwitterKiller.model.User;
+import com.deathexxsize.TheTwitterKiller.repository.TweetRepository;
 import com.deathexxsize.TheTwitterKiller.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,16 +34,20 @@ public class AuthService {
         User user = userMapper.toUser(registerDTO);
         user.setPassword(encoder.encode(registerDTO.getPassword()));
         userRepo.save(user);
-        return "success";
+        return getToken(user.getUsername(), registerDTO.getPassword());
     }
 
     public String verify(LoginDTO loginDTO) {
+        return getToken(loginDTO.getUsername(), loginDTO.getPassword());
+    }
+
+    private String getToken(String username, String password) {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginDTO.getUsername(), loginDTO.getPassword()
+                username, password
         ));
 
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(loginDTO.getUsername());
+            return jwtService.generateToken(username);
         } else {
             return "fail";
         }

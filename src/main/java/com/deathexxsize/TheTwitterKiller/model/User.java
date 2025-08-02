@@ -23,11 +23,13 @@ public class User {
     private String username;
     @Column(length = 128, unique = true)
     private String email;
-    @Column(length = 64)
     private String password;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role = Role.USER;
+
+    @Column(nullable = false, name = "is_enable")
+    private boolean enabled = true;
 
     @OneToMany(mappedBy = "user")
     private List<Like> likes = new ArrayList<>();
