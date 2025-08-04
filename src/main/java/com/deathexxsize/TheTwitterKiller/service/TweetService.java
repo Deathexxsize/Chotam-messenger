@@ -1,7 +1,6 @@
 package com.deathexxsize.TheTwitterKiller.service;
 
 import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.AllTweetsResponse;
-import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.CreateTweetRequest;
 import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.CreateTweetResponse;
 import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.TweetFeedResponse;
 import com.deathexxsize.TheTwitterKiller.exception.UserNotFoundException;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
