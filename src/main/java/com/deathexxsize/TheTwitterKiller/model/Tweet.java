@@ -37,7 +37,6 @@ public class Tweet {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private User user;
 
     @OneToMany(mappedBy = "tweet")

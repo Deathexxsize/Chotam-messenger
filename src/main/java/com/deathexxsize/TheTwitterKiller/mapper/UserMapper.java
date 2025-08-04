@@ -1,6 +1,6 @@
 package com.deathexxsize.TheTwitterKiller.mapper;
 
-import com.deathexxsize.TheTwitterKiller.dto.RegisterDTO;
+import com.deathexxsize.TheTwitterKiller.dto.authDTOs.RegisterDTO;
 import com.deathexxsize.TheTwitterKiller.dto.TweetDTO;
 import com.deathexxsize.TheTwitterKiller.dto.UserProfileDTO;
 import com.deathexxsize.TheTwitterKiller.model.User;

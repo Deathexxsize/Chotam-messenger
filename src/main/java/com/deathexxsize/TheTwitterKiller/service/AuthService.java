@@ -1,10 +1,8 @@
 package com.deathexxsize.TheTwitterKiller.service;
 
-import com.deathexxsize.TheTwitterKiller.dto.LoginDTO;
-import com.deathexxsize.TheTwitterKiller.dto.RegisterDTO;
+import com.deathexxsize.TheTwitterKiller.dto.authDTOs.RegisterDTO;
 import com.deathexxsize.TheTwitterKiller.mapper.UserMapper;
 import com.deathexxsize.TheTwitterKiller.model.User;
-import com.deathexxsize.TheTwitterKiller.repository.TweetRepository;
 import com.deathexxsize.TheTwitterKiller.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,7 +35,7 @@ public class AuthService {
         return getToken(user.getUsername(), registerDTO.getPassword());
     }
 
-    public String verify(LoginDTO loginDTO) {
+    public String verify(com.deathexxsize.TheTwitterKiller.dto.authDTO.LoginDTO loginDTO) {
         return getToken(loginDTO.getUsername(), loginDTO.getPassword());
     }
 

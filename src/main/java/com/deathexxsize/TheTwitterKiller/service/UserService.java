@@ -3,6 +3,7 @@ package com.deathexxsize.TheTwitterKiller.service;
 import com.deathexxsize.TheTwitterKiller.dto.FollowDTO;
 import com.deathexxsize.TheTwitterKiller.dto.UserProfileDTO;
 import com.deathexxsize.TheTwitterKiller.exception.AccountDeactivatedException;
+import com.deathexxsize.TheTwitterKiller.exception.UserNotFoundException;
 import com.deathexxsize.TheTwitterKiller.mapper.FollowMapper;
 import com.deathexxsize.TheTwitterKiller.mapper.UserMapper;
 import com.deathexxsize.TheTwitterKiller.model.Follow;
@@ -32,27 +33,31 @@ public class UserService {
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
 
     public UserProfileDTO getUserProfile(String username) {
-        User user = userRepo.findByUsername(username);
+        User user = userRepo.findByUsername(username)
+                        .orElseThrow(() ->new UserNotFoundException(username +" not found"));
         isEnable(user);
         return userMapper.toUserProfileDTO(user);
     }
 
     public List<FollowDTO> getFollowers(String username) {
-        User user = userRepo.findByUsername(username);
+        User user = userRepo.findByUsername(username)
+                .orElseThrow(() ->new UserNotFoundException(username +" not found"));
         List<Follow> followers = user.getFollowers();
 
         return followMapper.toFollowersDTOs(followers);
     }
 
     public List<FollowDTO> getFollowing(String username) {
-        User user = userRepo.findByUsername(username);
+        User user = userRepo.findByUsername(username)
+                .orElseThrow(() ->new UserNotFoundException(username +" not found"));
         List<Follow> following = user.getFollowing();
 
         return followMapper.toFollowingDTOs(following);
     }
 
     public String editUserData(String username, Map<String, Object> edits) {
-        User user = userRepo.findByUsername(username);
+        User user = userRepo.findByUsername(username)
+                .orElseThrow(() ->new UserNotFoundException(username +" not found"));
 
         edits.forEach((key, value) -> {
             switch (key) {
@@ -68,7 +73,8 @@ public class UserService {
     }
 
     public String deleteProfile(String username) {
-        User user = userRepo.findByUsername(username);
+        User user = userRepo.findByUsername(username)
+                .orElseThrow(() ->new UserNotFoundException(username +" not found"));
         user.setEnabled(false);
         userRepo.save(user);
         return "Account is deactivated";

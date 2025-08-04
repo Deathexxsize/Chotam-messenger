@@ -1,6 +1,7 @@
 package com.deathexxsize.TheTwitterKiller.service;
 
 
+import com.deathexxsize.TheTwitterKiller.exception.UserNotFoundException;
 import com.deathexxsize.TheTwitterKiller.model.User;
 import com.deathexxsize.TheTwitterKiller.model.UserPrincipal;
 import com.deathexxsize.TheTwitterKiller.repository.UserRepository;
@@ -18,12 +19,8 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-
-        if (user == null) {
-            System.out.println("user not found");
-            throw new UsernameNotFoundException("user not found");
-        }
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() ->new UserNotFoundException(username +" not found"));
 
         return new UserPrincipal(user);
     }

@@ -26,4 +26,20 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponseDTO);
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerNotFound(
+            UserNotFoundException exception,
+            HttpServletRequest request
+    ) {
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+          404,
+          "not found",
+                exception.getMessage(),
+                request.getRequestURI(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponseDTO);
+    }
 }

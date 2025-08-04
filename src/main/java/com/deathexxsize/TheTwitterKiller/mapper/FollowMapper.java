@@ -14,12 +14,14 @@ public interface FollowMapper {
     @Named("toFollowersDTO")
     @Mapping(target = "username", source = "follower.username")
     FollowDTO toFollowersDTO(Follow follow);
+
     @IterableMapping(qualifiedByName = "toFollowersDTO")
     List<FollowDTO> toFollowersDTOs(List<Follow> followers);
 
     @Named("toFollowingDTO")
     @Mapping(target = "username", source = "following.username")
     FollowDTO toFollowingDTO(Follow follow);
+
     @IterableMapping(qualifiedByName = "toFollowingDTO")
     List<FollowDTO> toFollowingDTOs(List<Follow> followers);
 }
