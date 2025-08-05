@@ -75,4 +75,20 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponseDTO);
     }
+
+    @ExceptionHandler(TweetNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerNotFound(
+            TweetNotFoundException exception,
+            HttpServletRequest request
+    ) {
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                404,
+                "tweet not found",
+                exception.getMessage(),
+                request.getRequestURI(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponseDTO);
+    }
 }

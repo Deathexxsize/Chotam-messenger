@@ -9,11 +9,12 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TweetRepository extends JpaRepository<Tweet, Integer> {
     List<Tweet> findTweetById(Integer id);
-    Tweet getTweetById(Integer id);
+    Optional<Tweet> getTweetById(Integer id);
 
     @Query("""
     SELECT new com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.TweetFeedResponse(

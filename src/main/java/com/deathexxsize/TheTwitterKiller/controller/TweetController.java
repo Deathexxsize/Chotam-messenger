@@ -43,7 +43,12 @@ public class TweetController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity< ? > deletePost(@PathVariable int id ,@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(tweetService.deletePost(id, userDetails.getUsername()));
+    public ResponseEntity< ? > deleteTweet(@PathVariable int id , @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(tweetService.deleteTweet(id, userDetails.getUsername()));
+    }
+
+    @GetMapping("/{tweetId}/comments")
+    public ResponseEntity< ? > getAllComments(@PathVariable int tweetId) {
+        return ResponseEntity.ok(tweetService.getComments(tweetId));
     }
 }
