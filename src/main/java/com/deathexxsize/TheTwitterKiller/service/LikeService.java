@@ -9,22 +9,17 @@ import com.deathexxsize.TheTwitterKiller.model.User;
 import com.deathexxsize.TheTwitterKiller.repository.LikeRepository;
 import com.deathexxsize.TheTwitterKiller.repository.TweetRepository;
 import com.deathexxsize.TheTwitterKiller.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@RequiredArgsConstructor
 @Service
 public class LikeService {
-
-    @Autowired
-    private LikeRepository likeRepo;
-
-    @Autowired
-    private UserRepository userRepo;
-
-    @Autowired
-    private TweetRepository tweetRepo;
+    private final LikeRepository likeRepo;
+    private final UserRepository userRepo;
+    private final TweetRepository tweetRepo;
 
     public String putLike(int tweetId, int userId) {
         User user = userRepo.getReferenceById(userId);

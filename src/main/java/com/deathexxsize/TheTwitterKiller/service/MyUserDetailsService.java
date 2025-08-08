@@ -5,17 +5,16 @@ import com.deathexxsize.TheTwitterKiller.exception.UserNotFoundException;
 import com.deathexxsize.TheTwitterKiller.model.User;
 import com.deathexxsize.TheTwitterKiller.model.UserPrincipal;
 import com.deathexxsize.TheTwitterKiller.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class MyUserDetailsService implements UserDetailsService {
-
-    @Autowired
-    UserRepository userRepository;
+    private  final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

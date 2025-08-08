@@ -3,6 +3,7 @@ package com.deathexxsize.TheTwitterKiller.controller;
 import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.CreateTweetRequest;
 import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.TweetFeedResponse;
 import com.deathexxsize.TheTwitterKiller.service.TweetService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,12 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/tweets")
 public class TweetController {
-
-    @Autowired
-    private TweetService tweetService;
+    private final TweetService tweetService;
 
     @PostMapping("/{username}")
     public ResponseEntity< ? > createTweet(

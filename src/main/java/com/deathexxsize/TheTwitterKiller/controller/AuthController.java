@@ -5,19 +5,17 @@ import com.deathexxsize.TheTwitterKiller.service.AuthService;
 //import io.swagger.v3.oas.annotations.Operation;
 //import io.swagger.v3.oas.annotations.responses.ApiResponse;
 //import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 //@Tag(name = "Auth API", description = "Управление авторизацией")
 public class AuthController {
-
-
-
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
     @PostMapping("/register")
 //    @Operation(

@@ -9,6 +9,7 @@ import com.deathexxsize.TheTwitterKiller.mapper.UserMapper;
 import com.deathexxsize.TheTwitterKiller.model.Follow;
 import com.deathexxsize.TheTwitterKiller.model.User;
 import com.deathexxsize.TheTwitterKiller.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,17 +19,12 @@ import java.util.List;
 import java.util.Map;
 
 
+@RequiredArgsConstructor
 @Service
 public class UserService {
-
-    @Autowired
-    private UserRepository userRepo;
-
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private FollowMapper followMapper;
+    private final UserRepository userRepo;
+    private final UserMapper userMapper;
+    private final FollowMapper followMapper;
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
 

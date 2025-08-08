@@ -1,6 +1,7 @@
 package com.deathexxsize.TheTwitterKiller.controller;
 
 import com.deathexxsize.TheTwitterKiller.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.Objects;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping("/me")
     public ResponseEntity< ? > getMyProfile(@AuthenticationPrincipal UserDetails userDetails) {
