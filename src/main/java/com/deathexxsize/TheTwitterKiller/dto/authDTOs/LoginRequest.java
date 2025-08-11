@@ -1,4 +1,4 @@
-package com.deathexxsize.TheTwitterKiller.dto.authDTOs;
+package com.deathexxsize.TheTwitterKiller.dto.authDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,10 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class RegisterDTO {
+@AllArgsConstructor
+public class LoginRequest {
     private String username;
-    private String email;
     private String password;
 }

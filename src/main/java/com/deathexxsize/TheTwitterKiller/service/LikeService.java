@@ -40,7 +40,7 @@ public class LikeService {
         return "You've been liked";
     }
 
-    public String removeLike(int userId, int tweetId) {
+    public String removeLike(int tweetId, int userId) {
         LikeId likeId = new LikeId(userId, tweetId);
 
         if (!likeRepo.existsById(likeId)) {

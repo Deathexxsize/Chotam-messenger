@@ -1,9 +1,8 @@
 package com.deathexxsize.TheTwitterKiller.config;
 
 import com.deathexxsize.TheTwitterKiller.filter.JwtFilter;
-import com.deathexxsize.TheTwitterKiller.service.MyUserDetailsService;
+import com.deathexxsize.TheTwitterKiller.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final MyUserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
     private final JwtFilter jwtFilter;
 
     @Bean

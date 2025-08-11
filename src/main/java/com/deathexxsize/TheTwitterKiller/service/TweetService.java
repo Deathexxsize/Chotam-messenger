@@ -1,14 +1,13 @@
 package com.deathexxsize.TheTwitterKiller.service;
 
-import com.deathexxsize.TheTwitterKiller.dto.commentDTOs.AllCommentsResponse;
 import com.deathexxsize.TheTwitterKiller.dto.commentDTOs.CommentDTO;
 import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.AllTweetsResponse;
 import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.CreateTweetResponse;
 import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.TweetFeedResponse;
+import com.deathexxsize.TheTwitterKiller.exception.AccountDeactivatedException;
 import com.deathexxsize.TheTwitterKiller.exception.TweetNotFoundException;
 import com.deathexxsize.TheTwitterKiller.exception.UserNotFoundException;
 import com.deathexxsize.TheTwitterKiller.mapper.commentMappers.AllCommentsMapper;
-import com.deathexxsize.TheTwitterKiller.mapper.commentMappers.CreateCommentMapper;
 import com.deathexxsize.TheTwitterKiller.mapper.tweetMappers.TweetMapper;
 import com.deathexxsize.TheTwitterKiller.model.Comment;
 import com.deathexxsize.TheTwitterKiller.model.Tweet;
@@ -17,7 +16,6 @@ import com.deathexxsize.TheTwitterKiller.repository.CommentRepository;
 import com.deathexxsize.TheTwitterKiller.repository.TweetRepository;
 import com.deathexxsize.TheTwitterKiller.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,9 +31,13 @@ public class TweetService {
     private final CommentRepository commentRepo;
     private final AllCommentsMapper allCommentsMapper;
 
-    public CreateTweetResponse createPost(String username, String title, String content) {
-        User user = userRepo.findByUsername(username)
-                .orElseThrow(() ->new UserNotFoundException(username +" not found"));
+    public CreateTweetResponse createPost(int userId , String title, String content) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() ->new UserNotFoundException("User not found"));
+
+        if (!user.isEnabled()) {
+            throw new AccountDeactivatedException("Account deactivated");
+        }
 
         Tweet tweet = new Tweet();
         tweet.setUser(user);
@@ -50,16 +52,25 @@ public class TweetService {
         User user = userRepo.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username + " not found"));
 
+        if (!user.isEnabled()) {
+            throw new AccountDeactivatedException("Account deactivated");
+        }
+
         List<Tweet> tweets = user.getTweets();
         return tweetMapper.toAllTweetsDTO(tweets);
     }
 
-    public AllTweetsResponse getUserTweet(String username, int id) {
+    public AllTweetsResponse getUserTweet(String username, int tweetId) {
         User user = userRepo.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username + " not found"));
 
-        Tweet tweet = tweetRepo.getTweetById(id)
+        if (!user.isEnabled()) {
+            throw new AccountDeactivatedException("Account deactivated");
+        }
+
+        Tweet tweet = tweetRepo.getTweetById(tweetId)
                 .orElseThrow(() -> new TweetNotFoundException("tweet not found"));
+
         return tweetMapper.toAllTweetsDTO(tweet);
     }
 
@@ -68,9 +79,12 @@ public class TweetService {
         return tweetRepo.findRecentTweetsFromFollowing(username, since);
     }
 
-    public String deleteTweet(int id, String username) {
-        User user = userRepo.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(username + " not found"));
+    public String deleteTweet(int id, int userId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        if (!user.isEnabled()) {
+            throw new AccountDeactivatedException("Account deactivated");
+        }
 
         tweetRepo.deleteById(id);
         return "tweet deleted";

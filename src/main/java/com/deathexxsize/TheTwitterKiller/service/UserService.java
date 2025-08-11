@@ -1,7 +1,7 @@
 package com.deathexxsize.TheTwitterKiller.service;
 
 import com.deathexxsize.TheTwitterKiller.dto.FollowDTO;
-import com.deathexxsize.TheTwitterKiller.dto.UserProfileDTO;
+import com.deathexxsize.TheTwitterKiller.dto.UserProfileResponse;
 import com.deathexxsize.TheTwitterKiller.exception.AccountDeactivatedException;
 import com.deathexxsize.TheTwitterKiller.exception.UserNotFoundException;
 import com.deathexxsize.TheTwitterKiller.mapper.FollowMapper;
@@ -27,10 +27,11 @@ public class UserService {
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
 
-    public UserProfileDTO getUserProfile(String username) {
-        User user = userRepo.findByUsername(username)
-                        .orElseThrow(() ->new UserNotFoundException(username +" not found"));
+    public UserProfileResponse getUserProfile(int userId) {
+        User user = userRepo.findById(userId)
+                        .orElseThrow(() ->new UserNotFoundException("User not found"));
         isEnable(user);
+
         return userMapper.toUserProfileDTO(user);
     }
 
@@ -50,9 +51,9 @@ public class UserService {
         return followMapper.toFollowingDTOs(following);
     }
 
-    public String editUserData(String username, Map<String, Object> edits) {
-        User user = userRepo.findByUsername(username)
-                .orElseThrow(() ->new UserNotFoundException(username +" not found"));
+    public String editUserData(int userId, Map<String, Object> edits) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() ->new UserNotFoundException("User not found"));
 
         edits.forEach((key, value) -> {
             switch (key) {
@@ -67,9 +68,9 @@ public class UserService {
         return "Success";
     }
 
-    public String deleteProfile(String username) {
-        User user = userRepo.findByUsername(username)
-                .orElseThrow(() ->new UserNotFoundException(username +" not found"));
+    public String deleteProfile(int userId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() ->new UserNotFoundException("User not found"));
         user.setEnabled(false);
         userRepo.save(user);
         return "Account is deactivated";

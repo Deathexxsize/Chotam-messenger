@@ -1,5 +1,6 @@
 package com.deathexxsize.TheTwitterKiller.dto;
 
+import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.TweetDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProfileDTO {
+public class UserProfileResponse {
     private String username;
     private int followers;
     private int following;

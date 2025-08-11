@@ -1,6 +1,6 @@
 package com.deathexxsize.TheTwitterKiller.service;
 
-import com.deathexxsize.TheTwitterKiller.dto.authDTOs.RegisterDTO;
+import com.deathexxsize.TheTwitterKiller.dto.authDTOs.RegisterRequest;
 import com.deathexxsize.TheTwitterKiller.mapper.UserMapper;
 import com.deathexxsize.TheTwitterKiller.model.User;
 import com.deathexxsize.TheTwitterKiller.repository.UserRepository;
@@ -21,15 +21,15 @@ public class AuthService {
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
 
-    public String register(RegisterDTO registerDTO) {
-        User user = userMapper.toUser(registerDTO);
-        user.setPassword(encoder.encode(registerDTO.getPassword()));
+    public String register(RegisterRequest registerRequest) {
+        User user = userMapper.toUser(registerRequest);
+        user.setPassword(encoder.encode(registerRequest.getPassword()));
         userRepo.save(user);
-        return getToken(user.getUsername(), registerDTO.getPassword());
+        return getToken(user.getUsername(), registerRequest.getPassword());
     }
 
-    public String verify(com.deathexxsize.TheTwitterKiller.dto.authDTO.LoginDTO loginDTO) {
-        return getToken(loginDTO.getUsername(), loginDTO.getPassword());
+    public String verify(com.deathexxsize.TheTwitterKiller.dto.authDTO.LoginRequest loginRequest) {
+        return getToken(loginRequest.getUsername(), loginRequest.getPassword());
     }
 
     private String getToken(String username, String password) {

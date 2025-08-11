@@ -1,5 +1,6 @@
 package com.deathexxsize.TheTwitterKiller.controller;
 
+import com.deathexxsize.TheTwitterKiller.model.UserPrincipal;
 import com.deathexxsize.TheTwitterKiller.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,16 +17,16 @@ public class FollowController {
     @PostMapping("/{authorId}")
     public ResponseEntity< ? > subscribe(
             @PathVariable int authorId,
-            @AuthenticationPrincipal UserDetails userDetails
-    ) {
-        return ResponseEntity.ok(followService.subscribe(authorId, userDetails.getUsername()));
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+            ) {
+        return ResponseEntity.ok(followService.subscribe(authorId, userPrincipal.getId()));
     }
 
     @DeleteMapping("/{authorId}")
     public ResponseEntity< ? > unsubscribe(
             @PathVariable int authorId,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal UserPrincipal userPrincipal
             ) {
-        return ResponseEntity.ok(followService.unsubscribe(authorId, userDetails.getUsername()));
+        return ResponseEntity.ok(followService.unsubscribe(authorId, userPrincipal.getId()));
     }
 }

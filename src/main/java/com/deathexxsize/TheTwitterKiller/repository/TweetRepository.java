@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Repository
 public interface TweetRepository extends JpaRepository<Tweet, Integer> {
-    List<Tweet> findTweetById(Integer id);
     Optional<Tweet> getTweetById(Integer id);
 
     @Query("""

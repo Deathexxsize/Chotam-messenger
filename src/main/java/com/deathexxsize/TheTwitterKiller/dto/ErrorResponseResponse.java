@@ -7,12 +7,13 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Getter @Setter
 @AllArgsConstructor
-public class TweetDTO {
-    private String title;
-    private String content;
-    private LocalDateTime createdAt;
+@NoArgsConstructor
+public class ErrorResponseResponse {
+    private int status;
+    private String error;
+    private String message;
+    private String path;
+    private LocalDateTime timestamp;
 }

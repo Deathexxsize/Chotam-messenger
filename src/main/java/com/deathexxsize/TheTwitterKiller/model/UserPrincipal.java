@@ -8,10 +8,24 @@ import java.util.List;
 
 public class UserPrincipal implements UserDetails {
 
+    private final int id;
+    private final String username;
+    private final String password;
+    private final Collection<? extends GrantedAuthority> authorities;
+
+
     private User user;
 
     public UserPrincipal(User user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.authorities = List.of();
         this.user = user;
+    }
+
+    public int getId() {
+        return id;
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.deathexxsize.TheTwitterKiller.service;
 
 import com.deathexxsize.TheTwitterKiller.dto.commentDTOs.CreateCommentRequest;
 import com.deathexxsize.TheTwitterKiller.dto.commentDTOs.CreateCommentResponse;
+import com.deathexxsize.TheTwitterKiller.exception.AccessDeniedException;
+import com.deathexxsize.TheTwitterKiller.exception.CommentNotFoundException;
 import com.deathexxsize.TheTwitterKiller.exception.TweetNotFoundException;
 import com.deathexxsize.TheTwitterKiller.exception.UserNotFoundException;
 import com.deathexxsize.TheTwitterKiller.mapper.commentMappers.CreateCommentMapper;
@@ -29,7 +31,7 @@ public class CommentService {
 
         Tweet tweet = tweetRepo.getTweetById(tweetId)
                 .orElseThrow(() -> new TweetNotFoundException("tweet not found"));
-        User user = userRepo.getUsersById(userId)
+        User user = userRepo.getUserById(userId)
                 .orElseThrow(() -> new UserNotFoundException("user not found"));
 
         Comment comment = new Comment();
@@ -43,7 +45,15 @@ public class CommentService {
         return commentMapper.toCreateCommentResponse(comment);
     }
 
-    public String removeComment(int commentId) {
+    public String removeComment(int commentId, int userId) {
+        Comment comment = commentRepo.getCommentById(commentId)
+                        .orElseThrow(() -> new CommentNotFoundException("comment not found"));
+        User user = userRepo.getUserById(userId)
+                .orElseThrow(() -> new UserNotFoundException("user not found"));
+
+        if (!(comment.getUser().getId() == userId)) {
+            throw new AccessDeniedException("You can delete only your own comments");
+        }
         commentRepo.deleteById(commentId);
         return "comment deleted";
     }

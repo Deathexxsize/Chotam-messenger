@@ -1,6 +1,7 @@
 package com.deathexxsize.TheTwitterKiller.service;
 
 import com.deathexxsize.TheTwitterKiller.exception.AccountDeactivatedException;
+import com.deathexxsize.TheTwitterKiller.exception.UserNotFoundException;
 import com.deathexxsize.TheTwitterKiller.model.Follow;
 import com.deathexxsize.TheTwitterKiller.model.FollowId;
 import com.deathexxsize.TheTwitterKiller.model.User;
@@ -19,10 +20,18 @@ public class FollowService {
     private final UserRepository userRepo;
     private final FollowRepository followRepo;
 
-    public String subscribe(int authorId, String username) {
-        User author = userRepo.getReferenceById(authorId);
+    public String subscribe(int authorId, int userId) {
+        User author = userRepo.getUserById(authorId)
+                        .orElseThrow(() -> new UserNotFoundException("Author not found"));
+
         isEnable(author);
-        User user = userRepo.getReferenceByUsername(username);
+
+        User user = userRepo.getUserById(userId)
+                .orElseThrow(() -> new UserNotFoundException("user not found"));
+
+        if (user.getId().equals(authorId)) { // что бы юзер не подписался сам на себя
+            throw new IllegalArgumentException("You cannot subscribe to yourself");
+        }
 
         FollowId followId = new FollowId(user.getId(), authorId);
 
@@ -37,10 +46,12 @@ public class FollowService {
     }
 
     @Transactional
-    public String unsubscribe(int authorId, String username) {
-        User author = userRepo.getReferenceById(authorId);
+    public String unsubscribe(int authorId, int userId) {
+        User author = userRepo.getUserById(authorId)
+                .orElseThrow(() -> new UserNotFoundException("Author not found"));
         isEnable(author);
-        User user = userRepo.getReferenceByUsername(username);
+        User user = userRepo.getUserById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User nor found"));
 
         followRepo.deleteByFollowerIdAndFollowingId(user.getId(), authorId);
 

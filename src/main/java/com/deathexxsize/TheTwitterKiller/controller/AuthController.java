@@ -1,6 +1,6 @@
 package com.deathexxsize.TheTwitterKiller.controller;
 
-import com.deathexxsize.TheTwitterKiller.dto.authDTOs.RegisterDTO;
+import com.deathexxsize.TheTwitterKiller.dto.authDTOs.RegisterRequest;
 import com.deathexxsize.TheTwitterKiller.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +13,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity< ? > register(@RequestBody RegisterDTO registerDTO) {
-        return ResponseEntity.ok(authService.register(registerDTO));
+    public ResponseEntity< ? > register(@RequestBody RegisterRequest registerRequest) {
+        return ResponseEntity.ok(authService.register(registerRequest));
     }
 
     @PostMapping("/login")
-    public ResponseEntity< ? > login(@RequestBody com.deathexxsize.TheTwitterKiller.dto.authDTO.LoginDTO loginDTO) {
-        return ResponseEntity.ok(authService.verify(loginDTO));
+    public ResponseEntity< ? > login(@RequestBody com.deathexxsize.TheTwitterKiller.dto.authDTO.LoginRequest loginRequest) {
+        return ResponseEntity.ok(authService.verify(loginRequest));
     }
 
 }
