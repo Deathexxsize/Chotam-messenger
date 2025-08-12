@@ -45,7 +45,7 @@ public class UserService {
 
     public List<FollowDTO> getFollowing(String username) {
         User user = userRepo.findByUsername(username)
-                .orElseThrow(() ->new UserNotFoundException(username +" not found"));
+                .orElseThrow(() ->new UserNotFoundException(username + " not found"));
         List<Follow> following = user.getFollowing();
 
         return followMapper.toFollowingDTOs(following);
