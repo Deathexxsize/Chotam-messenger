@@ -1,17 +1,14 @@
 package com.deathexxsize.TheTwitterKiller.controller;
 
+import com.deathexxsize.TheTwitterKiller.exception.InvalidVerificationCodeException;
 import com.deathexxsize.TheTwitterKiller.model.UserPrincipal;
 import com.deathexxsize.TheTwitterKiller.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @RestController
@@ -50,5 +47,7 @@ public class UserController {
     public ResponseEntity< ? > deleteProfile(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(userService.deleteProfile(userPrincipal.getId()));
     }
+
+
 
 }
