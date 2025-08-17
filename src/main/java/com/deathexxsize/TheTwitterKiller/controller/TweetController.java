@@ -26,14 +26,14 @@ public class TweetController {
         return ResponseEntity.ok(tweetService.createPost(userPrincipal.getId(), createTweetRequest.getTitle(), createTweetRequest.getContent()));
     }
 
-    @GetMapping("/{username}/tweets")
-    public ResponseEntity< ? > getAllTweets(@PathVariable String username) {
-        return ResponseEntity.ok(tweetService.getAllUserTweets(username));
+    @GetMapping("/{userId}/tweets")
+    public ResponseEntity< ? > getAllTweets(@PathVariable int userId) {
+        return ResponseEntity.ok(tweetService.getAllUserTweets(userId));
     }
 
-    @GetMapping("/{username}/{tweetId}")
-    public ResponseEntity< ? > getTweet(@PathVariable String username, @PathVariable int tweetId) {
-        return ResponseEntity.ok(tweetService.getUserTweet(username, tweetId));
+    @GetMapping("/{userId}/{tweetId}")
+    public ResponseEntity< ? > getTweet(@PathVariable int userId, @PathVariable int tweetId) {
+        return ResponseEntity.ok(tweetService.getUserTweet(userId, tweetId));
     }
 
     @GetMapping("/feed")

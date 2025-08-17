@@ -26,14 +26,14 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserProfile(userId));
     }
 
-    @GetMapping("/{username}/followers")
-    public ResponseEntity< ? > getFollowers(@PathVariable String username) {
-        return ResponseEntity.ok(userService.getFollowers(username));
+    @GetMapping("/{userId}/followers")
+    public ResponseEntity< ? > getFollowers(@PathVariable int userId) {
+        return ResponseEntity.ok(userService.getFollowers(userId));
     }
 
-    @GetMapping("/{username}/following")
-    public ResponseEntity< ? > getFollowing(@PathVariable String username) {
-        return ResponseEntity.ok(userService.getFollowing(username));
+    @GetMapping("/{userId}/following")
+    public ResponseEntity< ? > getFollowing(@PathVariable int userId) {
+        return ResponseEntity.ok(userService.getFollowing(userId));
     }
 
     @PatchMapping("/edit")

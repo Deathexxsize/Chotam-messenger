@@ -19,15 +19,12 @@ public class FollowService {
 
     private final UserRepository userRepo;
     private final FollowRepository followRepo;
+    private final UserCacheService userCacheService;
 
     public String subscribe(int authorId, int userId) {
-        User author = userRepo.getUserById(authorId)
-                        .orElseThrow(() -> new UserNotFoundException("Author not found"));
-
+        User author = userCacheService.getOrLoad(authorId);
         isEnable(author);
-
-        User user = userRepo.getUserById(userId)
-                .orElseThrow(() -> new UserNotFoundException("user not found"));
+        User user = userCacheService.getOrLoad(userId);
 
         if (user.getId().equals(authorId)) { // что бы юзер не подписался сам на себя
             throw new IllegalArgumentException("You cannot subscribe to yourself");
@@ -47,11 +44,9 @@ public class FollowService {
 
     @Transactional
     public String unsubscribe(int authorId, int userId) {
-        User author = userRepo.getUserById(authorId)
-                .orElseThrow(() -> new UserNotFoundException("Author not found"));
+        User author = userCacheService.getOrLoad(authorId);
         isEnable(author);
-        User user = userRepo.getUserById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User nor found"));
+        User user = userCacheService.getOrLoad(userId);
 
         followRepo.deleteByFollowerIdAndFollowingId(user.getId(), authorId);
 

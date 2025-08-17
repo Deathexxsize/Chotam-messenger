@@ -1,6 +1,7 @@
 package com.deathexxsize.TheTwitterKiller.config;
 
 import com.deathexxsize.TheTwitterKiller.dto.authDTOs.VerificationData;
+import com.deathexxsize.TheTwitterKiller.model.User;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -38,6 +40,22 @@ public class RedisConfig {
         // Для хэшей
         template.setHashKeySerializer(new StringRedisSerializer());
         template.setHashValueSerializer(serializer);
+
+        template.afterPropertiesSet();
+        return template;
+    }
+
+    @Bean
+    public RedisTemplate<Integer, User> userJsonRedisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<Integer, User> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+
+        // int -> string
+        template.setKeySerializer(new GenericToStringSerializer(Integer.class));
+
+        // user -> JSON
+        Jackson2JsonRedisSerializer<User> valueSerializer = new Jackson2JsonRedisSerializer<>(User.class);
+        template.setValueSerializer(valueSerializer);
 
         template.afterPropertiesSet();
         return template;

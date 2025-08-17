@@ -3,8 +3,6 @@ package com.deathexxsize.TheTwitterKiller.service;
 import com.deathexxsize.TheTwitterKiller.dto.FollowDTO;
 import com.deathexxsize.TheTwitterKiller.dto.UserProfileResponse;
 import com.deathexxsize.TheTwitterKiller.exception.AccountDeactivatedException;
-import com.deathexxsize.TheTwitterKiller.exception.InvalidVerificationCodeException;
-import com.deathexxsize.TheTwitterKiller.exception.UserNotFoundException;
 import com.deathexxsize.TheTwitterKiller.mapper.FollowMapper;
 import com.deathexxsize.TheTwitterKiller.mapper.UserMapper;
 import com.deathexxsize.TheTwitterKiller.model.Follow;
@@ -19,44 +17,36 @@ import java.util.List;
 import java.util.Map;
 
 
-
 @RequiredArgsConstructor
 @Service
 public class UserService {
     private final UserRepository userRepo;
     private final UserMapper userMapper;
     private final FollowMapper followMapper;
+    private final UserCacheService userCacheService;
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
 
     public UserProfileResponse getUserProfile(int userId) {
-        User user = userRepo.findById(userId)
-                        .orElseThrow(() ->new UserNotFoundException("User not found"));
+        User user = userCacheService.getOrLoad(userId);
         isEnable(user);
-
         return userMapper.toUserProfileDTO(user);
     }
 
-    public List<FollowDTO> getFollowers(String username) {
-        User user = userRepo.findByUsername(username)
-                .orElseThrow(() ->new UserNotFoundException(username +" not found"));
+    public List<FollowDTO> getFollowers(int userId) {
+        User user = userCacheService.getOrLoad(userId);
         List<Follow> followers = user.getFollowers();
-
         return followMapper.toFollowersDTOs(followers);
     }
 
-    public List<FollowDTO> getFollowing(String username) {
-        User user = userRepo.findByUsername(username)
-                .orElseThrow(() ->new UserNotFoundException(username + " not found"));
+    public List<FollowDTO> getFollowing(int userId) {
+        User user = userCacheService.getOrLoad(userId);
         List<Follow> following = user.getFollowing();
-
         return followMapper.toFollowingDTOs(following);
     }
 
     public String editUserData(int userId, Map<String, Object> edits) {
-        User user = userRepo.findById(userId)
-                .orElseThrow(() ->new UserNotFoundException("User not found"));
-
+        User user = userCacheService.getOrLoad(userId);
         edits.forEach((key, value) -> {
             switch (key) {
                 case "username"-> user.setUsername(String.valueOf(value));
@@ -71,8 +61,7 @@ public class UserService {
     }
 
     public String deleteProfile(int userId) {
-        User user = userRepo.findById(userId)
-                .orElseThrow(() ->new UserNotFoundException("User not found"));
+        User user = userCacheService.getOrLoad(userId);
         user.setEnabled(false);
         userRepo.save(user);
         return "Account is deactivated";

@@ -26,14 +26,16 @@ public class CommentService {
     private final TweetRepository tweetRepo;
     private final UserRepository userRepo;
     private final CreateCommentMapper commentMapper;
+    private final UserCacheService userCacheService;
 
-    public CreateCommentResponse createComment(int tweetId, int userId, CreateCommentRequest createRequest) {
+    public CreateCommentResponse createComment(
+            int tweetId,
+            int userId,
+            CreateCommentRequest createRequest) {
 
         Tweet tweet = tweetRepo.getTweetById(tweetId)
                 .orElseThrow(() -> new TweetNotFoundException("tweet not found"));
-        User user = userRepo.getUserById(userId)
-                .orElseThrow(() -> new UserNotFoundException("user not found"));
-
+        User user = userCacheService.getOrLoad(userId);
         Comment comment = new Comment();
         comment.setContent(createRequest.getContent());
         comment.setTweet(tweet);

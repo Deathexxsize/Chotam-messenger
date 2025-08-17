@@ -26,15 +26,13 @@ import java.util.List;
 public class TweetService {
 
     private final TweetRepository tweetRepo;
-    private final UserRepository userRepo;
     private final TweetMapper tweetMapper;
     private final CommentRepository commentRepo;
     private final AllCommentsMapper allCommentsMapper;
+    private final UserCacheService userCacheService;
 
     public CreateTweetResponse createPost(int userId , String title, String content) {
-        User user = userRepo.findById(userId)
-                .orElseThrow(() ->new UserNotFoundException("User not found"));
-
+        User user = userCacheService.getOrLoad(userId);
         if (!user.isEnabled()) {
             throw new AccountDeactivatedException("Account deactivated");
         }
@@ -48,53 +46,48 @@ public class TweetService {
         return tweetMapper.toCreateTweetDTO(tweet);
     }
 
-    public List<AllTweetsResponse> getAllUserTweets(String username) {
-        User user = userRepo.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(username + " not found"));
-
+    public List<AllTweetsResponse> getAllUserTweets(int userId) {
+        User user = userCacheService.getOrLoad(userId);
         if (!user.isEnabled()) {
             throw new AccountDeactivatedException("Account deactivated");
         }
 
-        List<Tweet> tweets = user.getTweets();
+        List<Tweet> tweets = user.getTweets(); // в кэщ
         return tweetMapper.toAllTweetsDTO(tweets);
     }
 
-    public AllTweetsResponse getUserTweet(String username, int tweetId) {
-        User user = userRepo.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(username + " not found"));
+    public AllTweetsResponse getUserTweet(int userId, int tweetId) {
+        User user = userCacheService.getOrLoad(userId);
 
         if (!user.isEnabled()) {
             throw new AccountDeactivatedException("Account deactivated");
         }
 
-        Tweet tweet = tweetRepo.getTweetById(tweetId)
+        Tweet tweet = tweetRepo.getTweetById(tweetId) // в кэш
                 .orElseThrow(() -> new TweetNotFoundException("tweet not found"));
 
         return tweetMapper.toAllTweetsDTO(tweet);
     }
 
     public List<TweetFeedResponse> getDailyNews(String username) {
-        LocalDateTime since = LocalDateTime.now().minusHours(24);
+        LocalDateTime since = LocalDateTime.now().minusHours(24); // в кэш
         return tweetRepo.findRecentTweetsFromFollowing(username, since);
     }
 
     public String deleteTweet(int id, int userId) {
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        User user = userCacheService.getOrLoad(userId);
         if (!user.isEnabled()) {
             throw new AccountDeactivatedException("Account deactivated");
         }
-
         tweetRepo.deleteById(id);
         return "tweet deleted";
     }
 
     public List<CommentDTO> getComments(int tweetId) {
-        Tweet tweet = tweetRepo.getTweetById(tweetId)
+        Tweet tweet = tweetRepo.getTweetById(tweetId) // в кэщ
                 .orElseThrow(() -> new TweetNotFoundException("tweet not found"));
 
-        List<Comment> comments = commentRepo.findByTweetId(tweetId);
+        List<Comment> comments = commentRepo.findByTweetId(tweetId); // в кэш
         return allCommentsMapper.toAllCommentsResponse(comments);
     }
 
