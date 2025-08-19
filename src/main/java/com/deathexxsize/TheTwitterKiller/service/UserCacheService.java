@@ -33,7 +33,7 @@ public class UserCacheService {
             valueOps.setIfAbsent(userId, user, 10, TimeUnit.MINUTES);
             return user;
         }
-        System.out.println("cashe");
+        System.out.println("user cashe");
         return user;
     }
 

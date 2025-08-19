@@ -1,12 +1,10 @@
 package com.deathexxsize.TheTwitterKiller.service;
 
 import com.deathexxsize.TheTwitterKiller.exception.AccountDeactivatedException;
-import com.deathexxsize.TheTwitterKiller.exception.UserNotFoundException;
 import com.deathexxsize.TheTwitterKiller.model.Follow;
 import com.deathexxsize.TheTwitterKiller.model.FollowId;
 import com.deathexxsize.TheTwitterKiller.model.User;
 import com.deathexxsize.TheTwitterKiller.repository.FollowRepository;
-import com.deathexxsize.TheTwitterKiller.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +15,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class FollowService {
 
-    private final UserRepository userRepo;
     private final FollowRepository followRepo;
     private final UserCacheService userCacheService;
 

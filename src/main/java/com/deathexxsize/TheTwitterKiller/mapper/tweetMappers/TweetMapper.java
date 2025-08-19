@@ -2,7 +2,6 @@ package com.deathexxsize.TheTwitterKiller.mapper.tweetMappers;
 
 import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.AllTweetsResponse;
 import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.CreateTweetResponse;
-import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.TweetFeedResponse;
 import com.deathexxsize.TheTwitterKiller.model.Tweet;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

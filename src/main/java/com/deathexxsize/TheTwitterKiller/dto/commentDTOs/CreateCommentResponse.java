@@ -1,19 +1,22 @@
 package com.deathexxsize.TheTwitterKiller.dto.commentDTOs;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 
-@Getter @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class CreateCommentResponse {
-    private int commentId;
-    private String author;
-    private int tweetId;
-    private String content;
-    private LocalDateTime timestamp;
-}
+@Schema(description = "Ответ после написания комментария")
+public record CreateCommentResponse (
+        @Schema(description = "ID созданного комментария", example = "123")
+        int commentId,
+
+        @Schema(description = "Автор комментария", example = "username")
+        String author,
+
+        @Schema(description = "ID твита", example = "456")
+        int tweetId,
+
+        @Schema(description = "Содержание комментария", example = "Отличный твит!")
+        String content,
+
+        @Schema(description = "Время создания комментария", example = "2024-01-15T14:30:00")
+        LocalDateTime timestamp
+) { }

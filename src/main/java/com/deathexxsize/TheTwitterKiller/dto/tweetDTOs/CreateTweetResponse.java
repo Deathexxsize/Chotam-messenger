@@ -1,15 +1,15 @@
 package com.deathexxsize.TheTwitterKiller.dto.tweetDTOs;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-@Getter @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class CreateTweetResponse {
-    private String username;
-    private String title;
-    private String content;
-}
+@Schema(description = "Ответ при успешном создании твита")
+public record CreateTweetResponse (
+        @Schema(description = "Имя пользователя автора твита", example = "Tor")
+        String username,
+
+        @Schema(description = "Заголовок твита", example = "Мой первый твит")
+        String title,
+
+        @Schema(description = "Содержание твита", example = "Это содержимое моего первого твита!")
+        String content
+) {}

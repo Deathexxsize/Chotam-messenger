@@ -37,7 +37,7 @@ public class CommentService {
                 .orElseThrow(() -> new TweetNotFoundException("tweet not found"));
         User user = userCacheService.getOrLoad(userId);
         Comment comment = new Comment();
-        comment.setContent(createRequest.getContent());
+        comment.setContent(createRequest.content());
         comment.setTweet(tweet);
         comment.setUser(user);
         comment.setCreatedAt(LocalDateTime.now());

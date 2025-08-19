@@ -1,14 +1,7 @@
 package com.deathexxsize.TheTwitterKiller.dto.commentDTOs;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import java.util.List;
 
-@Getter @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class AllCommentsResponse {
-    private List<CommentDTO> commentDTOList;
-}
+public record AllCommentsResponse(
+        List<CommentDTO> commentDTOList
+) { }

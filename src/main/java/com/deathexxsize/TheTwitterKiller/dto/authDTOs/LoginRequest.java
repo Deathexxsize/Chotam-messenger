@@ -1,15 +1,11 @@
-package com.deathexxsize.TheTwitterKiller.dto.authDTO;
+package com.deathexxsize.TheTwitterKiller.dto.authDTOs;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class LoginRequest {
-    private String username;
-    private String password;
-}
+@Schema(description = "поля для запроса на автризации")
+public record LoginRequest(
+        @Schema(description = "имя пользователя", example = "Tobi")
+         String username,
+         @Schema(description = "пароль пользователя", example = "tobi123")
+         String password
+) { }

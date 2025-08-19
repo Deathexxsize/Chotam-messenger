@@ -1,9 +1,6 @@
 package com.deathexxsize.TheTwitterKiller.service;
 
-import com.deathexxsize.TheTwitterKiller.dto.authDTOs.ForgotPasswordResponse;
-import com.deathexxsize.TheTwitterKiller.dto.authDTOs.RegisterRequest;
-import com.deathexxsize.TheTwitterKiller.dto.authDTOs.ResetPasswordRequest;
-import com.deathexxsize.TheTwitterKiller.dto.authDTOs.VerificationData;
+import com.deathexxsize.TheTwitterKiller.dto.authDTOs.*;
 import com.deathexxsize.TheTwitterKiller.exception.InvalidVerificationCodeException;
 import com.deathexxsize.TheTwitterKiller.exception.PasswordsDontMatchException;
 import com.deathexxsize.TheTwitterKiller.exception.UserNotFoundException;
@@ -41,18 +38,17 @@ public class AuthService {
         valueOps = template.opsForValue();
     }
 
-
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
 
-    public String register(RegisterRequest registerRequest) {
+    public JwtResponse register(RegisterRequest registerRequest) {
         User user = userMapper.toUser(registerRequest);
         user.setPassword(encoder.encode(registerRequest.getPassword()));
         userRepo.save(user);
-        return getToken(user.getUsername(), registerRequest.getPassword());
+        return new JwtResponse(getToken(user.getUsername(), registerRequest.getPassword()));
     }
 
-    public String verify(com.deathexxsize.TheTwitterKiller.dto.authDTO.LoginRequest loginRequest) {
-        return getToken(loginRequest.getUsername(), loginRequest.getPassword());
+    public JwtResponse verify(com.deathexxsize.TheTwitterKiller.dto.authDTOs.LoginRequest loginRequest) {
+        return new JwtResponse(getToken(loginRequest.username(), loginRequest.password()));
     }
 
     private String getToken(String username, String password) {
@@ -93,27 +89,27 @@ public class AuthService {
     }
 
     public String resetPassword(ResetPasswordRequest request) {
-        Long ttl = template.getExpire(request.getToken(), TimeUnit.SECONDS);
+        Long ttl = template.getExpire(request.token(), TimeUnit.SECONDS);
         if (ttl == null || ttl <= 0) {
             throw new VerificationCodeTimeoutException("The time for verification has expired. Please try again.");
         }
 
-        VerificationData data = (VerificationData) valueOps.get(request.getToken());
+        VerificationData data = (VerificationData) valueOps.get(request.token());
 
-        if (!(data.getCode() == request.getCode())) {
+        if (!(data.code() == request.code())) {
             throw new InvalidVerificationCodeException("Incorrect verification code");
         }
 
-        if (!request.getPassword().equals(request.getConfirmPassword())) {
+        if (!request.password().equals(request.confirmPassword())) {
             throw new PasswordsDontMatchException("The passwords you entered don't match");
         }
 
-        User user = userRepo.findByUsername(data.getUsername())
+        User user = userRepo.findByUsername(data.username())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        user.setPassword(encoder.encode(request.getConfirmPassword()));
+        user.setPassword(encoder.encode(request.confirmPassword()));
 
-        template.delete(request.getToken());
+        template.delete(request.token());
 
         return "Your password has been successfully updated";
     }

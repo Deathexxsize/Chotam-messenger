@@ -1,16 +1,13 @@
 package com.deathexxsize.TheTwitterKiller.dto.authDTOs;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class RegisterRequest {
-    private String username;
-    private String email;
-    private String password;
-}
+@Schema(description = "поля для запроса регистрации")
+public record RegisterRequest (
+        @Schema(description = "имя пользоваиеля", example = "Robert")
+        String username,
+        @Schema(description = "электронная почта пользователя", example = "robert@gmail.com")
+        String email,
+        @Schema(description = "пароль пользователя", example = "robert123")
+        String password
+) { }

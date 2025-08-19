@@ -1,15 +1,11 @@
 package com.deathexxsize.TheTwitterKiller.dto.authDTOs;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class ForgotPasswordResponse {
-    private String message;
-    private String token;
-}
+@Schema(description = "Ответ на сброс пароля пользователю")
+public record ForgotPasswordResponse (
+        @Schema(description = "Сообщение пользователю", example = "На вашу почту было отправлено код верификации")
+         String message,
+         @Schema(description = "uuid токен доступа", example = "a51bf672-d812...")
+         String token
+) {}
