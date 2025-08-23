@@ -13,6 +13,7 @@ import com.deathexxsize.TheTwitterKiller.model.User;
 import com.deathexxsize.TheTwitterKiller.repository.CommentRepository;
 import com.deathexxsize.TheTwitterKiller.repository.TweetRepository;
 import com.deathexxsize.TheTwitterKiller.repository.UserRepository;
+import com.deathexxsize.TheTwitterKiller.service.caches.UserCacheService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class CommentService {
 
         Tweet tweet = tweetRepo.getTweetById(tweetId)
                 .orElseThrow(() -> new TweetNotFoundException("tweet not found"));
-        User user = userCacheService.getOrLoad(userId);
+        User user = userCacheService.getUserOrLoad(userId);
         Comment comment = new Comment();
         comment.setContent(createRequest.content());
         comment.setTweet(tweet);

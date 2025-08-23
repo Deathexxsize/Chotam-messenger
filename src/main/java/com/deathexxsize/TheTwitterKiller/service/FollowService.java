@@ -5,6 +5,7 @@ import com.deathexxsize.TheTwitterKiller.model.Follow;
 import com.deathexxsize.TheTwitterKiller.model.FollowId;
 import com.deathexxsize.TheTwitterKiller.model.User;
 import com.deathexxsize.TheTwitterKiller.repository.FollowRepository;
+import com.deathexxsize.TheTwitterKiller.service.caches.UserCacheService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +20,9 @@ public class FollowService {
     private final UserCacheService userCacheService;
 
     public String subscribe(int authorId, int userId) {
-        User author = userCacheService.getOrLoad(authorId);
+        User author = userCacheService.getUserOrLoad(authorId);
         isEnable(author);
-        User user = userCacheService.getOrLoad(userId);
+        User user = userCacheService.getUserOrLoad(userId);
 
         if (user.getId().equals(authorId)) { // что бы юзер не подписался сам на себя
             throw new IllegalArgumentException("You cannot subscribe to yourself");
@@ -41,9 +42,9 @@ public class FollowService {
 
     @Transactional
     public String unsubscribe(int authorId, int userId) {
-        User author = userCacheService.getOrLoad(authorId);
+        User author = userCacheService.getUserOrLoad(authorId);
         isEnable(author);
-        User user = userCacheService.getOrLoad(userId);
+        User user = userCacheService.getUserOrLoad(userId);
 
         followRepo.deleteByFollowerIdAndFollowingId(user.getId(), authorId);
 

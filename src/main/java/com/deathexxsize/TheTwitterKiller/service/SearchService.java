@@ -19,7 +19,7 @@ public class SearchService {
     private final UserSearchMapper userSearchMapper;
 
     public List<UserSearchResponse> userSearch(UserSearchRequest userSearchRequest) {
-        List<User> users = userRepo.findByUsernameStartingWithIgnoreCase(userSearchRequest.getUsername());
+        List<User> users = userRepo.findByUsernameStartingWithIgnoreCase(userSearchRequest.username());
 
         if (users.isEmpty()) throw new UserNotFoundException("User not found");
 

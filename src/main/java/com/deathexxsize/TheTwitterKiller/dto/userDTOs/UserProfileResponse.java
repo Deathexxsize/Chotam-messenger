@@ -1,4 +1,4 @@
-package com.deathexxsize.TheTwitterKiller.dto;
+package com.deathexxsize.TheTwitterKiller.dto.userDTOs;
 
 import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.TweetDTO;
 import io.swagger.v3.oas.annotations.media.Schema;

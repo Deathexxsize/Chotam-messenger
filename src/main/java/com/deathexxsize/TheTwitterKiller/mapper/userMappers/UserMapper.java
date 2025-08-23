@@ -1,8 +1,8 @@
-package com.deathexxsize.TheTwitterKiller.mapper;
+package com.deathexxsize.TheTwitterKiller.mapper.userMappers;
 
 import com.deathexxsize.TheTwitterKiller.dto.authDTOs.RegisterRequest;
 import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.TweetDTO;
-import com.deathexxsize.TheTwitterKiller.dto.UserProfileResponse;
+import com.deathexxsize.TheTwitterKiller.dto.userDTOs.UserProfileResponse;
 import com.deathexxsize.TheTwitterKiller.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,13 +1,14 @@
 package com.deathexxsize.TheTwitterKiller.service;
 
 import com.deathexxsize.TheTwitterKiller.dto.FollowDTO;
-import com.deathexxsize.TheTwitterKiller.dto.UserProfileResponse;
+import com.deathexxsize.TheTwitterKiller.dto.userDTOs.UserProfileResponse;
 import com.deathexxsize.TheTwitterKiller.exception.AccountDeactivatedException;
 import com.deathexxsize.TheTwitterKiller.mapper.FollowMapper;
-import com.deathexxsize.TheTwitterKiller.mapper.UserMapper;
+import com.deathexxsize.TheTwitterKiller.mapper.userMappers.UserMapper;
 import com.deathexxsize.TheTwitterKiller.model.Follow;
 import com.deathexxsize.TheTwitterKiller.model.User;
 import com.deathexxsize.TheTwitterKiller.repository.UserRepository;
+import com.deathexxsize.TheTwitterKiller.service.caches.UserCacheService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,25 +29,25 @@ public class UserService {
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
 
     public UserProfileResponse getUserProfile(int userId) {
-        User user = userCacheService.getOrLoad(userId);
+        User user = userCacheService.getUserOrLoad(userId);
         isEnable(user);
         return userMapper.toUserProfileDTO(user);
     }
 
     public List<FollowDTO> getFollowers(int userId) {
-        User user = userCacheService.getOrLoad(userId);
+        User user = userCacheService.getUserOrLoad(userId);
         List<Follow> followers = user.getFollowers();
         return followMapper.toFollowersDTOs(followers);
     }
 
     public List<FollowDTO> getFollowing(int userId) {
-        User user = userCacheService.getOrLoad(userId);
+        User user = userCacheService.getUserOrLoad(userId);
         List<Follow> following = user.getFollowing();
         return followMapper.toFollowingDTOs(following);
     }
 
     public String editUserData(int userId, Map<String, Object> edits) {
-        User user = userCacheService.getOrLoad(userId);
+        User user = userCacheService.getUserOrLoad(userId);
         edits.forEach((key, value) -> {
             switch (key) {
                 case "username"-> user.setUsername(String.valueOf(value));
@@ -61,7 +62,7 @@ public class UserService {
     }
 
     public String deleteProfile(int userId) {
-        User user = userCacheService.getOrLoad(userId);
+        User user = userCacheService.getUserOrLoad(userId);
         user.setEnabled(false);
         userRepo.save(user);
         return "Account is deactivated";

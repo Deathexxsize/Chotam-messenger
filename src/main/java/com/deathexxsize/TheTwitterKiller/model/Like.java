@@ -21,7 +21,7 @@ public class Like {
     @EmbeddedId
     private LikeId id;
 
-    @MapsId("userId")
+    @MapsId("authorId")
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.NO_ACTION)

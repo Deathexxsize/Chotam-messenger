@@ -42,6 +42,5 @@ public interface TweetRepository extends JpaRepository<Tweet, Integer> {
             @Param("since") LocalDateTime since
     );
 
-
-
+    List<Tweet> findAllByUserId(int userId);
 }

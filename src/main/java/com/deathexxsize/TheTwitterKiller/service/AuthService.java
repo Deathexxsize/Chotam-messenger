@@ -5,7 +5,7 @@ import com.deathexxsize.TheTwitterKiller.exception.InvalidVerificationCodeExcept
 import com.deathexxsize.TheTwitterKiller.exception.PasswordsDontMatchException;
 import com.deathexxsize.TheTwitterKiller.exception.UserNotFoundException;
 import com.deathexxsize.TheTwitterKiller.exception.VerificationCodeTimeoutException;
-import com.deathexxsize.TheTwitterKiller.mapper.UserMapper;
+import com.deathexxsize.TheTwitterKiller.mapper.userMappers.UserMapper;
 import com.deathexxsize.TheTwitterKiller.model.User;
 import com.deathexxsize.TheTwitterKiller.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
@@ -30,8 +30,8 @@ public class AuthService {
     private final AuthenticationManager authManager;
     private final UserMapper userMapper;
     private final EmailService emailService;
-    private final RedisTemplate<String, VerificationData> template;
-    private ValueOperations<String, VerificationData> valueOps;
+    private final RedisTemplate<String, Object> template;
+    private ValueOperations<String, Object> valueOps;
 
     @PostConstruct
     public void init() {
@@ -42,9 +42,9 @@ public class AuthService {
 
     public JwtResponse register(RegisterRequest registerRequest) {
         User user = userMapper.toUser(registerRequest);
-        user.setPassword(encoder.encode(registerRequest.getPassword()));
+        user.setPassword(encoder.encode(registerRequest.password()));
         userRepo.save(user);
-        return new JwtResponse(getToken(user.getUsername(), registerRequest.getPassword()));
+        return new JwtResponse(getToken(user.getUsername(), registerRequest.password()));
     }
 
     public JwtResponse verify(com.deathexxsize.TheTwitterKiller.dto.authDTOs.LoginRequest loginRequest) {

@@ -11,6 +11,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class LikeId implements Serializable {
-    private Integer userId;
+    private Integer authorId;
     private Integer tweetId;
 }

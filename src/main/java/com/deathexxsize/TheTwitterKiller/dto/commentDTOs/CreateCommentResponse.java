@@ -9,7 +9,7 @@ public record CreateCommentResponse (
         int commentId,
 
         @Schema(description = "Автор комментария", example = "username")
-        String author,
+        String authorId,
 
         @Schema(description = "ID твита", example = "456")
         int tweetId,

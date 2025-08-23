@@ -5,16 +5,17 @@ import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.AllTweetsResponse;
 import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.CreateTweetResponse;
 import com.deathexxsize.TheTwitterKiller.dto.tweetDTOs.TweetFeedResponse;
 import com.deathexxsize.TheTwitterKiller.exception.AccountDeactivatedException;
-import com.deathexxsize.TheTwitterKiller.exception.TweetNotFoundException;
-import com.deathexxsize.TheTwitterKiller.exception.UserNotFoundException;
 import com.deathexxsize.TheTwitterKiller.mapper.commentMappers.AllCommentsMapper;
+import com.deathexxsize.TheTwitterKiller.mapper.commentMappers.CommentCacheMapper;
 import com.deathexxsize.TheTwitterKiller.mapper.tweetMappers.TweetMapper;
 import com.deathexxsize.TheTwitterKiller.model.Comment;
 import com.deathexxsize.TheTwitterKiller.model.Tweet;
 import com.deathexxsize.TheTwitterKiller.model.User;
 import com.deathexxsize.TheTwitterKiller.repository.CommentRepository;
 import com.deathexxsize.TheTwitterKiller.repository.TweetRepository;
-import com.deathexxsize.TheTwitterKiller.repository.UserRepository;
+import com.deathexxsize.TheTwitterKiller.service.caches.CommentCacheService;
+import com.deathexxsize.TheTwitterKiller.service.caches.TweetCacheService;
+import com.deathexxsize.TheTwitterKiller.service.caches.UserCacheService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +31,11 @@ public class TweetService {
     private final CommentRepository commentRepo;
     private final AllCommentsMapper allCommentsMapper;
     private final UserCacheService userCacheService;
+    private final TweetCacheService tweetCacheService;
+    private final CommentCacheService commentCacheService;
 
     public CreateTweetResponse createPost(int userId , String title, String content) {
-        User user = userCacheService.getOrLoad(userId);
+        User user = userCacheService.getUserOrLoad(userId);
         if (!user.isEnabled()) {
             throw new AccountDeactivatedException("Account deactivated");
         }
@@ -47,47 +50,42 @@ public class TweetService {
     }
 
     public List<AllTweetsResponse> getAllUserTweets(int userId) {
-        User user = userCacheService.getOrLoad(userId);
+        User user = userCacheService.getUserOrLoad(userId);
         if (!user.isEnabled()) {
             throw new AccountDeactivatedException("Account deactivated");
         }
-
-        List<Tweet> tweets = user.getTweets(); // в кэщ
+        List<Tweet> tweets = tweetCacheService.getUserTweetsOrLoad(userId);
         return tweetMapper.toAllTweetsDTO(tweets);
     }
 
     public AllTweetsResponse getUserTweet(int userId, int tweetId) {
-        User user = userCacheService.getOrLoad(userId);
-
+        User user = userCacheService.getUserOrLoad(userId);
         if (!user.isEnabled()) {
             throw new AccountDeactivatedException("Account deactivated");
         }
-
-        Tweet tweet = tweetRepo.getTweetById(tweetId) // в кэш
-                .orElseThrow(() -> new TweetNotFoundException("tweet not found"));
-
+        Tweet tweet = tweetCacheService.getTweetOrLoad(tweetId);
         return tweetMapper.toAllTweetsDTO(tweet);
     }
 
     public List<TweetFeedResponse> getDailyNews(String username) {
-        LocalDateTime since = LocalDateTime.now().minusHours(24); // в кэш
+        LocalDateTime since = LocalDateTime.now().minusHours(24); // ! в кэш, но потом
         return tweetRepo.findRecentTweetsFromFollowing(username, since);
     }
 
-    public String deleteTweet(int id, int userId) {
-        User user = userCacheService.getOrLoad(userId);
+    public String deleteTweet(int tweetId, int userId) {
+        User user = userCacheService.getUserOrLoad(userId);
         if (!user.isEnabled()) {
             throw new AccountDeactivatedException("Account deactivated");
         }
-        tweetRepo.deleteById(id);
+        tweetRepo.deleteById(tweetId);
+        tweetCacheService.evictTweet(tweetId, userId);
         return "tweet deleted";
     }
 
     public List<CommentDTO> getComments(int tweetId) {
-        Tweet tweet = tweetRepo.getTweetById(tweetId) // в кэщ
-                .orElseThrow(() -> new TweetNotFoundException("tweet not found"));
+        Tweet tweet = tweetCacheService.getTweetOrLoad(tweetId);
 
-        List<Comment> comments = commentRepo.findByTweetId(tweetId); // в кэш
+        List<Comment> comments = commentCacheService.getCommentsOrLoad(tweetId);
         return allCommentsMapper.toAllCommentsResponse(comments);
     }
 

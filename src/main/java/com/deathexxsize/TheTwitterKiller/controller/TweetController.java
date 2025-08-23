@@ -125,7 +125,7 @@ public class TweetController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Твиты за 24 успшено получены",
+                            description = "Твиты за 24 часа успешно получены",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = TweetFeedResponse.class)

@@ -1,8 +1,7 @@
 package com.deathexxsize.TheTwitterKiller.controller;
 
 import com.deathexxsize.TheTwitterKiller.dto.FollowDTO;
-import com.deathexxsize.TheTwitterKiller.dto.UserProfileResponse;
-import com.deathexxsize.TheTwitterKiller.exception.InvalidVerificationCodeException;
+import com.deathexxsize.TheTwitterKiller.dto.userDTOs.UserProfileResponse;
 import com.deathexxsize.TheTwitterKiller.model.UserPrincipal;
 import com.deathexxsize.TheTwitterKiller.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

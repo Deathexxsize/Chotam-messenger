@@ -8,9 +8,11 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CreateCommentMapper {
 
-    @Mapping(source = "user.username", target = "author")
+    @Mapping(source = "id", target = "commentId")
+    @Mapping(source = "user.username", target = "authorId")
     @Mapping(source = "tweet.id", target = "tweetId")
     @Mapping(source = "createdAt", target = "timestamp")
-    @Mapping(source = "comment.id", target = "commentId")
+    @Mapping(source = "content", target = "content")
     CreateCommentResponse toCreateCommentResponse(Comment comment);
 }
+

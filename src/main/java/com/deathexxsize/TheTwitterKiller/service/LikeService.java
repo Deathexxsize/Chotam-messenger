@@ -44,7 +44,7 @@ public class LikeService {
         LikeId likeId = new LikeId(userId, tweetId);
 
         if (!likeRepo.existsById(likeId)) {
-            throw new LikeNotFoundException("Like not found for tweetId: " + tweetId + " and userId: " + userId);
+            throw new LikeNotFoundException("Like not found for tweetId: " + tweetId + " and authorId: " + userId);
         }
 
         likeRepo.deleteById(likeId);

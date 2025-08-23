@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UserSearchMapper {
 
-    @Mapping(source = "id", target = "userId")
+    @Mapping(target = "userId", source = "id")
     UserSearchResponse toUserSearchResponse(User user);
 
     List<UserSearchResponse> toUserSearchResponse(List<User> users);
